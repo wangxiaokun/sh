@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd `dirname $0`; pwd)"
+
+
 
 USER=`whoami`
 
@@ -22,7 +25,7 @@ fi
 
 
 
-/usr/bin/expect expect_ssh_keygen
+/usr/bin/expect ${SCRIPT_DIR}/expect_ssh_keygen
 
 if [ "$?" != "0" ]; then
     echo -e "\033[45;37m failed... \033[0m"

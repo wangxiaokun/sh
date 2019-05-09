@@ -1,10 +1,10 @@
 #!/bin/bash
 
-SERVER_LIST=(10.10.10.10 10.10.10.11 10.10.10.12 10.10.10.13)
-#SERVER_LIST=(10.10.10.10)
+SERVER_LIST=(192.168.45.133 192.168.45.134)
+REMOTE_USER="root"
+REMOTE_PASSWORD="rootpwd"
 
-REMOTE_USER="xxx"
-REMOTE_PASSWORD="xxxxxx"
+SCRIPT_DIR="$(cd `dirname $0`; pwd)"
 
 ###################################################################
 
@@ -20,8 +20,7 @@ ID_RAS_PUB_FILE_PATH="${ID_RAS_PUB_PATH}/.ssh/id_rsa.pub"
 
 ###################################################################
 
-#将公钥的内容附加到远程主机2的authorized_keys
-function SSH_COPY_LOCAL_PUB_TO_REMOTE()
+function ssh_copy_local_pub_to_remote()
 {
     dst_host=$1
     dst_port=$2
@@ -31,7 +30,7 @@ function SSH_COPY_LOCAL_PUB_TO_REMOTE()
     echo ""
     echo -e "\033[45;37m 与主机 ${dst_host} 建立信任关系... \033[0m"
     
-    /usr/bin/expect expect_ssh_copy ${ID_RAS_PUB_FILE_PATH} ${dst_host} ${dst_port} ${dst_username} ${dst_passwd}
+    /usr/bin/expect ${SCRIPT_DIR}/expect_ssh_copy ${ID_RAS_PUB_FILE_PATH} ${dst_host} ${dst_port} ${dst_username} ${dst_passwd}
     
     if [ "$?" != "0" ]; then
         echo "expect failed"
@@ -47,7 +46,7 @@ do
         continue;
     fi
     
-    SSH_COPY_LOCAL_PUB_TO_REMOTE ${server} 22 ${REMOTE_USER} ${REMOTE_PASSWORD}
+    ssh_copy_local_pub_to_remote ${server} 22 ${REMOTE_USER} ${REMOTE_PASSWORD}
 done
 
 
